@@ -1,4 +1,12 @@
 /* CSS Reset  */
+:root {
+  --gunmetal: #022b3aff;
+  --teal: #1f7a8cff;
+  --columbia-blue: #bfdbf7ff;
+  --lavender-web: #e1e5f2ff;
+  --white: #ffffffff;
+}
+
 html {
   box-sizing: border-box;
   font-size: 16px;
@@ -29,8 +37,108 @@ ol,
 ul {
   list-style: none;
 }
+/* Main styles  */
 
-img {
-  max-width: 100%;
-  height: auto;
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--white);
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar  */
+
+.sidebar {
+  width: 250px;
+  background: var(--teal);
+  padding: 20px;
+  border-right: 1px solid var(--columbia-blue);
+}
+
+#projects-list {
+  list-style: none;
+  padding: 0;
+}
+
+#projects-list li {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 5px 0;
+}
+
+#projects-list li:hover {
+  background: var(--lavender-web);
+}
+
+/* Main content  */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: var(--gunmetal);
+}
+
+#todos-list {
+  list-style: none;
+  padding: 0;
+}
+
+.todo-item {
+  background: var(--white);
+  border: 1px solid var(--lavender-web);
+  border-radius: 4px;
+  padding: 15px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Modal  */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background: var(--white);
+  margin: 15% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 5px;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* Buttons  */
+
+.btn-primary {
+  background: var(--teal);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
 }
