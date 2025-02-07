@@ -36,4 +36,12 @@ export default class ProjectManager {
       this.currentProject = this.projects[0];
     }
   }
+  editTodo(todoIndex, newData) {
+    const todo = this.currentProject.todos[todoIndex];
+    todo.title = newData.title;
+    todo.description = newData.description;
+    todo.dueDate = newData.dueDate;
+    todo.priority = newData.priority;
+    Storage.save(this.projects);
+  }
 }
