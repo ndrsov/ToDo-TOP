@@ -6,14 +6,60 @@
     <title>ToDo TOP</title>
   </head>
   <body>
-    <header>Todo App</header>
-    <header>
-      <button id="add-project">Add Project</button>
-      <button id="add-todo">Add ToDo</button>
-    </header>
-    <div>
-      <div id="projects-list"></div>
-      <div id="todos-list"></div>
+    <div class="container">
+      <!-- Sidebar  -->
+      <div class="sidebar">
+        <h2>Projects</h2>
+        <ul id="projects-list"></ul>
+        <button id="new-project-btn" class="btn-primary">Add Project</button>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <header>
+          <h1 id="current-project-title">Default Project</h1>
+          <button id="new-todo-btn" class="btn-primary">+ New Todo</button>
+        </header>
+        <div id="todos-container">
+          <ul id="todos-list"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Projects -->
+    <div id="project-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>New Project</h3>
+        <form id="project-form">
+          <input
+            type="text"
+            id="project-name"
+            placeholder="Project Name"
+            required
+          />
+          <button type="submit" class="btn-primary">Create</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal for Todos -->
+    <div id="todo-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>New Todo</h3>
+        <form id="todo-form">
+          <input type="text" id="todo-title" placeholder="Title" required />
+          <textarea id="todo-description" placeholder="Description"></textarea>
+          <input type="date" id="todo-dueDate" required />
+          <select id="todo-priority">
+            <option value="1">Low Priority</option>
+            <option value="2">Medium Priority</option>
+            <option value="3">High Priority</option>
+          </select>
+          <button type="submit" class="btn-primary">Save</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>
