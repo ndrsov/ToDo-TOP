@@ -1,10 +1,14 @@
-export default class Storage {
-  static save(projects) {
-    localStorage.setItem('projects', JSON.stringify(projects));
-  }
+export const Storage = {
+  save(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+  },
 
-  static load() {
-    const projects = localStorage.getItem('projects');
-    return projects ? JSON.parse(projects) : null;
-  }
-}
+  load(key) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  },
+
+  remove(key) {
+    localStorage.removeItem(key);
+  },
+};
