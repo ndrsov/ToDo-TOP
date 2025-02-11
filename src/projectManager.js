@@ -1,47 +1,134 @@
-import Todo from './todo';
-import Storage from './utils/storage';
+import { Storage } from './utils/storage';
+import { Todo } from './todo';
 
-export default class ProjectManager {
+export class ProjectManager {
   constructor() {
-    this.projects = [];
-    this.projects.push({ name: 'Default', todos: [] });
-    this.currentProject = this.projects[0];
-    this.load();
+    this.projects = new Map();
+    this.currentProject = null;
+    this.observers = new Set();
   }
 
-  addProject(name) {
-    this.projects.push({ name, todos: [] });
-    Storage.save(this.projects);
+  subscribe(observer) {
+    this.observers.add(observer);
   }
 
-  setCurrentProject(project) {
-    this.currentProject = project;
+  unsubscribe(observer) {
+    this.observers.delete(observer);
   }
 
-  addTodo(title, description, dueDate, priority) {
-    const newTodo = Todo(title, description, dueDate, priority);
-    this.currentProject.todos.push(newTodo);
-    Storage.save(this.projects);
+  notify() {
+    this.observers.forEach((observer) => observer());
   }
 
-  deleteTodo(todoIndex) {
-    this.currentProject.todos.splice(todoIndex, 1);
-    Storage.save(this.projects);
-  }
-
-  load() {
-    const loadedProjects = Storage.load();
-    if (loadedProjects) {
-      this.projects = loadedProjects;
-      this.currentProject = this.projects[0];
+  createProject(name) {
+    if (!this.projects.has(name)) {
+      this.projects.set(name, []);
+      this.saveToStorage();
+      this.notify();
+      return true;
     }
+    return false;
   }
-  editTodo(todoIndex, newData) {
-    const todo = this.currentProject.todos[todoIndex];
-    todo.title = newData.title;
-    todo.description = newData.description;
-    todo.dueDate = newData.dueDate;
-    todo.priority = newData.priority;
-    Storage.save(this.projects);
+
+  deleteProject(name) {
+    if (this.projects.has(name)) {
+      this.projects.delete(name);
+      if (this.currentProject === name) {
+        this.currentProject = null;
+      }
+      this.saveToStorage();
+      this.notify();
+      return true;
+    }
+    return false;
+  }
+
+  setCurrentProject(name) {
+    if (this.projects.has(name)) {
+      this.currentProject = name;
+      this.saveToStorage();
+      this.notify();
+      return true;
+    }
+    return false;
+  }
+
+  getCurrentProject() {
+    return this.currentProject;
+  }
+
+  addTodo(projectName, todoData) {
+    if (this.projects.has(projectName)) {
+      const todo = new Todo(
+        todoData.title,
+        todoData.description,
+        todoData.priority,
+        todoData.dueDate
+      );
+      this.projects.get(projectName).push(todo);
+      this.saveToStorage();
+      this.notify();
+      return todo;
+    }
+    return null;
+  }
+
+  deleteTodo(projectName, todoId) {
+    if (this.projects.has(projectName)) {
+      const todos = this.projects.get(projectName);
+      const index = todos.findIndex((todo) => todo.id === todoId);
+      if (index !== -1) {
+        todos.splice(index, 1);
+        this.saveToStorage();
+        this.notify();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  editTodo(projectName, todoId, updatedTodo) {
+    if (this.projects.has(projectName)) {
+      const todos = this.projects.get(projectName);
+      const todo = todos.find((todo) => todo.id === todoId);
+      if (todo) {
+        todo.update(updatedTodo);
+        this.saveToStorage();
+        this.notify();
+        return todo;
+      }
+    }
+    return null;
+  }
+
+  toggleTodoComplete(projectName, todoId) {
+    if (this.projects.has(projectName)) {
+      const todos = this.projects.get(projectName);
+      const todo = todos.find((todo) => todo.id === todoId);
+      if (todo) {
+        todo.toggleComplete();
+        this.saveToStorage();
+        this.notify();
+        return todo;
+      }
+    }
+    return null;
+  }
+
+  saveToStorage() {
+    const data = {
+      projects: Object.fromEntries(this.projects),
+      currentProject: this.currentProject,
+    };
+    Storage.save('todoApp', data);
+  }
+
+  loadFromStorage() {
+    const data = Storage.load('todoApp');
+    if (data) {
+      this.projects = new Map(Object.entries(data.projects));
+      this.currentProject = data.currentProject;
+      this.notify();
+    }
   }
 }
