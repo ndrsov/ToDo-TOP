@@ -1,13 +1,18 @@
-export default class Todo {
-  constructor(title, description, dueDate, priority) {
+export class Todo {
+  constructor(title, description, priority, dueDate) {
+    this.id = Date.now().toString();
     this.title = title;
     this.description = description;
-    this.dueDate = dueDate;
     this.priority = priority;
+    this.dueDate = dueDate;
     this.completed = false;
+    this.createdAt = new Date().toISOString();
   }
-
   toggleComplete() {
     this.completed = !this.completed;
+  }
+
+  update(data) {
+    Object.assign(this, data);
   }
 }
