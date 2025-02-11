@@ -10,56 +10,54 @@
       <!-- Sidebar  -->
       <div class="sidebar">
         <h2>Projects</h2>
-        <ul id="projects-list"></ul>
-        <button id="new-project-btn" class="btn-primary">Add Project</button>
+        <div class="new-project-form">
+          <input type="text" placeholder="New Project" id="project-name" />
+          <button id="add-prject" class="btn btn-primary">Add</button>
+        </div>
+        <div id="projects-list"></div>
       </div>
 
       <!-- Main Content -->
-      <div class="main-content">
-        <header>
-          <h1 id="current-project-title">Default Project</h1>
-          <button id="new-todo-btn" class="btn-primary">+ New Todo</button>
-        </header>
-        <div id="todos-container">
-          <ul id="todos-list"></ul>
+      <main class="main-content">
+        <div class="main-header">
+          <h2>Todos</h2>
+          <button id="show-todo-form" class="btn btn-primary">New Todo</button>
         </div>
-      </div>
-    </div>
 
-    <!-- Modal for Projects -->
-    <div id="project-modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3>New Project</h3>
-        <form id="project-form">
-          <input
-            type="text"
-            id="project-name"
-            placeholder="Project Name"
-            required
-          />
-          <button type="submit" class="btn-primary">Create</button>
-        </form>
-      </div>
-    </div>
+        <!-- Todo Form  -->
+        <div id="todo-form" class="todo-form">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="todo-title">Title</label>
+              <input type="text" id="todo-title" required />
+            </div>
 
-    <!-- Modal for Todos -->
-    <div id="todo-modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3>New Todo</h3>
-        <form id="todo-form">
-          <input type="text" id="todo-title" placeholder="Title" required />
-          <textarea id="todo-description" placeholder="Description"></textarea>
-          <input type="date" id="todo-dueDate" required />
-          <select id="todo-priority">
-            <option value="1">Low Priority</option>
-            <option value="2">Medium Priority</option>
-            <option value="3">High Priority</option>
-          </select>
-          <button type="submit" class="btn-primary">Save</button>
-        </form>
-      </div>
+            <div class="form-field">
+              <label for="todo-priority">Priority</label>
+              <select id="todo-priority" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="todo-dueDate">Due Date</label>
+              <input type="date" id="todo-dueDate" required />
+            </div>
+            <div class="form-field" style="grid-column: span 2">
+              <label for="todo-description">Description</label>
+              <textarea id="todo-description" required></textarea>
+            </div>
+            <div class="form-field" style="grid-column: span 2">
+              <button id="add-todo" class="btn btn-primary">Add Todo</button>
+            </div>
+          </div>
+
+          <!-- Todo List  -->
+          <div id="todos-list" class="todo-list"></div>
+        </div>
+      </main>
     </div>
   </body>
 </html>
