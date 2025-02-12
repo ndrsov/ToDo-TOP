@@ -30,7 +30,7 @@ export class DOM {
   }
 
   setupEventListeners() {
-    // Main event listeners
+    // Project event listeners
     this.addProjectButton.addEventListener('click', () => {
       const projectName = this.projectNameInput.value.trim();
       if (projectName) {
@@ -118,32 +118,34 @@ export class DOM {
       return;
     }
 
-    const todos = this.projectManager.get(currentProject);
+    const todos = this.projectManager.projects.get(currentProject);
     todos.forEach((todo) => {
       const todoDiv = document.createElement('div');
       todoDiv.className = `todo-item priority-${todo.priority}`;
       if (todo.completed) todoDiv.classList.add('completed');
 
       const todoContent = `
-          <div class="todo-header">
-              <h3>${todo.title}</h3>
-              <span class="todo-date">Due: ${format(
-                new Date(todo.dueDate),
-                'MMM d, yyyy'
-              )}</span>
-          </div>
-          <p class="todo-description">${todo.description}</p>
-          <div class="todo-footer">
-              <span class="todo-priority">Priority: ${todo.priority}</span>
-              <div class="todo-actions">
-                  <button class="btn btn-success btn-complete">${
-                    todo.completed ? 'Undo' : 'Complete'
-                  }</button>
-                  <button class="btn btn-primary btn-edit">Edit</button>
-                  <button class="btn btn-danger btn-delete">Delete</button>
-              </div>
-          </div>
-      `;
+                <div class="todo-header">
+                    <h3>${todo.title}</h3>
+                    <span class="todo-date">Due: ${format(
+                      new Date(todo.dueDate),
+                      'MMM d, yyyy'
+                    )}</span>
+                </div>
+                <p class="todo-description">${todo.description}</p>
+                <div class="todo-footer">
+                    <span class="todo-priority">Priority: ${
+                      todo.priority
+                    }</span>
+                    <div class="todo-actions">
+                        <button class="btn btn-success btn-complete">${
+                          todo.completed ? 'Undo' : 'Complete'
+                        }</button>
+                        <button class="btn btn-primary btn-edit">Edit</button>
+                        <button class="btn btn-danger btn-delete">Delete</button>
+                    </div>
+                </div>
+            `;
 
       todoDiv.innerHTML = todoContent;
 
