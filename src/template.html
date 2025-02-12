@@ -24,39 +24,37 @@
           <button id="show-todo-form" class="btn btn-primary">New Todo</button>
         </div>
 
-        <!-- Todo Form  -->
+        <!-- Todo Form -->
         <div id="todo-form" class="todo-form">
           <div class="form-grid">
             <div class="form-field">
               <label for="todo-title">Title</label>
               <input type="text" id="todo-title" required />
             </div>
-
             <div class="form-field">
               <label for="todo-priority">Priority</label>
-              <select id="todo-priority" required>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
+              <select id="todo-priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
               </select>
             </div>
-
             <div class="form-field">
-              <label for="todo-dueDate">Due Date</label>
-              <input type="date" id="todo-dueDate" required />
+              <label for="todo-date">Due Date</label>
+              <input type="date" id="todo-date" required />
             </div>
             <div class="form-field" style="grid-column: span 2">
               <label for="todo-description">Description</label>
-              <textarea id="todo-description" required></textarea>
+              <textarea id="todo-description"></textarea>
             </div>
             <div class="form-field" style="grid-column: span 2">
-              <button id="add-todo" class="btn btn-primary">Add Todo</button>
+              <button id="add-todo" class="btn btn-success">Add Todo</button>
             </div>
           </div>
-
-          <!-- Todo List  -->
-          <div id="todos-list" class="todo-list"></div>
         </div>
+
+        <!-- Todos List -->
+        <div id="todos-list" class="todos-list"></div>
       </main>
     </div>
   </body>
