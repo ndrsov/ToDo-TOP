@@ -109,6 +109,84 @@ export class DOM {
     }
   }
 
+  // Update the showEditForm method in dom.js
+
+  showEditForm(todo, projectName) {
+    // Create a new div for the edit form
+    const editFormDiv = document.createElement('div');
+    editFormDiv.className = 'todo-form';
+
+    // Set the edit form HTML
+    editFormDiv.innerHTML = `
+      <div class="form-grid">
+          <div class="form-field">
+              <label for="edit-title">Title</label>
+              <input type="text" id="edit-title" value="${todo.title}" required>
+          </div>
+          <div class="form-field">
+              <label for="edit-priority">Priority</label>
+              <select id="edit-priority">
+                  <option value="low" ${
+                    todo.priority === 'low' ? 'selected' : ''
+                  }>Low</option>
+                  <option value="medium" ${
+                    todo.priority === 'medium' ? 'selected' : ''
+                  }>Medium</option>
+                  <option value="high" ${
+                    todo.priority === 'high' ? 'selected' : ''
+                  }>High</option>
+              </select>
+          </div>
+          <div class="form-field">
+              <label for="edit-date">Due Date</label>
+              <input type="date" id="edit-date" value="${
+                todo.dueDate
+              }" required>
+          </div>
+          <div class="form-field" style="grid-column: span 2;">
+              <label for="edit-description">Description</label>
+              <textarea id="edit-description">${todo.description}</textarea>
+          </div>
+          <div class="form-field" style="grid-column: span 2;">
+              <button class="btn btn-success" id="save-edit">Save Changes</button>
+              <button class="btn btn-danger" id="cancel-edit">Cancel</button>
+          </div>
+      </div>
+  `;
+
+    // Find the todo element to replace
+    const todoElement = this.todosList.querySelector(
+      `[data-todo-id="${todo.id}"]`
+    );
+    if (!todoElement) {
+      // If we can't find the specific todo element, just append to the list
+      this.todosList.appendChild(editFormDiv);
+    } else {
+      // Replace the todo with the edit form
+      todoElement.replaceWith(editFormDiv);
+    }
+
+    // Add event listeners for save and cancel buttons
+    document.getElementById('save-edit').addEventListener('click', () => {
+      const updatedTodo = {
+        title: document.getElementById('edit-title').value.trim(),
+        description: document.getElementById('edit-description').value.trim(),
+        priority: document.getElementById('edit-priority').value,
+        dueDate: document.getElementById('edit-date').value,
+      };
+
+      if (updatedTodo.title && updatedTodo.dueDate) {
+        this.projectManager.editTodo(projectName, todo.id, updatedTodo);
+      } else {
+        alert('Please fill in all required fields');
+      }
+    });
+
+    document.getElementById('cancel-edit').addEventListener('click', () => {
+      this.render(); // Just re-render the entire todos list
+    });
+  }
+
   renderTodos() {
     this.todosList.innerHTML = '';
     const currentProject = this.projectManager.getCurrentProject();
@@ -122,30 +200,29 @@ export class DOM {
     todos.forEach((todo) => {
       const todoDiv = document.createElement('div');
       todoDiv.className = `todo-item priority-${todo.priority}`;
+      todoDiv.dataset.todoId = todo.id; // Add this line to set the data-todo-id
       if (todo.completed) todoDiv.classList.add('completed');
 
       const todoContent = `
-                <div class="todo-header">
-                    <h3>${todo.title}</h3>
-                    <span class="todo-date">Due: ${format(
-                      new Date(todo.dueDate),
-                      'MMM d, yyyy'
-                    )}</span>
-                </div>
-                <p class="todo-description">${todo.description}</p>
-                <div class="todo-footer">
-                    <span class="todo-priority">Priority: ${
-                      todo.priority
-                    }</span>
-                    <div class="todo-actions">
-                        <button class="btn btn-success btn-complete">${
-                          todo.completed ? 'Undo' : 'Complete'
-                        }</button>
-                        <button class="btn btn-primary btn-edit">Edit</button>
-                        <button class="btn btn-danger btn-delete">Delete</button>
-                    </div>
-                </div>
-            `;
+          <div class="todo-header">
+              <h3>${todo.title}</h3>
+              <span class="todo-date">Due: ${format(
+                new Date(todo.dueDate),
+                'MMM d, yyyy'
+              )}</span>
+          </div>
+          <p class="todo-description">${todo.description}</p>
+          <div class="todo-footer">
+              <span class="todo-priority">Priority: ${todo.priority}</span>
+              <div class="todo-actions">
+                  <button class="btn btn-success btn-complete">${
+                    todo.completed ? 'Undo' : 'Complete'
+                  }</button>
+                  <button class="btn btn-primary btn-edit">Edit</button>
+                  <button class="btn btn-danger btn-delete">Delete</button>
+              </div>
+          </div>
+      `;
 
       todoDiv.innerHTML = todoContent;
 
@@ -165,73 +242,6 @@ export class DOM {
       });
 
       this.todosList.appendChild(todoDiv);
-    });
-  }
-
-  showEditForm(todo, projectName) {
-    const currentContent = this.todosList.innerHTML;
-    const formHTML = `
-            <div class="todo-form">
-                <div class="form-grid">
-                    <div class="form-field">
-                        <label for="edit-title">Title</label>
-                        <input type="text" id="edit-title" value="${
-                          todo.title
-                        }" required>
-                    </div>
-                    <div class="form-field">
-                        <label for="edit-priority">Priority</label>
-                        <select id="edit-priority">
-                            <option value="low" ${
-                              todo.priority === 'low' ? 'selected' : ''
-                            }>Low</option>
-                            <option value="medium" ${
-                              todo.priority === 'medium' ? 'selected' : ''
-                            }>Medium</option>
-                            <option value="high" ${
-                              todo.priority === 'high' ? 'selected' : ''
-                            }>High</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="edit-date">Due Date</label>
-                        <input type="date" id="edit-date" value="${
-                          todo.dueDate
-                        }" required>
-                    </div>
-                    <div class="form-field" style="grid-column: span 2;">
-                        <label for="edit-description">Description</label>
-                        <textarea id="edit-description">${
-                          todo.description
-                        }</textarea>
-                    </div>
-                    <div class="form-field" style="grid-column: span 2;">
-                        <button class="btn btn-success" id="save-edit">Save Changes</button>
-                        <button class="btn btn-danger" id="cancel-edit">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        `;
-
-    this.todosList.innerHTML = formHTML;
-
-    document.getElementById('save-edit').addEventListener('click', () => {
-      const updatedTodo = {
-        title: document.getElementById('edit-title').value,
-        description: document.getElementById('edit-description').value,
-        priority: document.getElementById('edit-priority').value,
-        dueDate: document.getElementById('edit-date').value,
-      };
-
-      if (updatedTodo.title && updatedTodo.dueDate) {
-        this.projectManager.editTodo(projectName, todo.id, updatedTodo);
-      } else {
-        alert('Please fill in all required fields');
-      }
-    });
-
-    document.getElementById('cancel-edit').addEventListener('click', () => {
-      this.todosList.innerHTML = currentContent;
     });
   }
 
