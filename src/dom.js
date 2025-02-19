@@ -109,8 +109,6 @@ export class DOM {
     }
   }
 
-  // Update the showEditForm method in dom.js
-
   showEditForm(todo, projectName) {
     // Create a new div for the edit form
     const editFormDiv = document.createElement('div');
