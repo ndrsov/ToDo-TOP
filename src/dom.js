@@ -224,6 +224,14 @@ export class DOM {
 
       todoDiv.innerHTML = todoContent;
 
+      // Debugging edit form
+      todoDiv.querySelector('.btn-edit').addEventListener('click', () => {
+        console.log('Edit button clicked');
+        console.log('Todo data:', todo);
+        console.log('Current project:', currentProject);
+        this.showEditForm(todo, currentProject);
+      });
+
       // Add event listeners
       todoDiv.querySelector('.btn-complete').addEventListener('click', () => {
         this.projectManager.toggleTodoComplete(currentProject, todo.id);
